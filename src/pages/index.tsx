@@ -1,212 +1,160 @@
 import React from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
+import MainLayout from '../components/layouts/Main';
 
 const Home: NextPage = () => {
   return (
-    <div className="container">
+    <MainLayout>
       <Head>
-        <title>Create Next App</title>
+        <title>NextDemo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1 className="title">
-          Welcome to &nbsp;
-          <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <div className="row">
+        <div className="col-md-8 blog-main">
+          <h3 className="pb-4 mb-4 font-italic border-bottom">Latest Posts</h3>
 
-        <p className="description">
-          Get started by editing &nbsp;
-          <code>pages/index.js</code>
-        </p>
+          <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div className="col-auto d-none d-lg-block">
+              <svg
+                className="bd-placeholder-img"
+                width={200}
+                height={250}
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid slice"
+                focusable="false"
+                role="img"
+                aria-label="Placeholder: Thumbnail"
+              >
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#55595c" />
+                <text x="50%" y="50%" fill="#eceeef" dy=".3em">
+                  Thumbnail
+                </text>
+              </svg>
+            </div>
+            <div className="col p-4 d-flex flex-column position-static">
+              <h3 className="mb-0">Featured post</h3>
+              <div className="mb-1 text-muted">Nov 12</div>
+              <p className="card-text mb-auto">
+                This is a wider card with supporting text below as a natural lead-in to additional
+                content.
+              </p>
+              <a href="#" className="stretched-link">
+                Continue reading
+              </a>
+            </div>
+          </div>
 
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div className="col-auto d-none d-lg-block">
+              <svg
+                className="bd-placeholder-img"
+                width={200}
+                height={250}
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMidYMid slice"
+                focusable="false"
+                role="img"
+                aria-label="Placeholder: Thumbnail"
+              >
+                <title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#55595c" />
+                <text x="50%" y="50%" fill="#eceeef" dy=".3em">
+                  Thumbnail
+                </text>
+              </svg>
+            </div>
+            <div className="col p-4 d-flex flex-column position-static">
+              <h3 className="mb-0">Featured post</h3>
+              <div className="mb-1 text-muted">Nov 12</div>
+              <p className="card-text mb-auto">
+                This is a wider card with supporting text below as a natural lead-in to additional
+                content.
+              </p>
+              <a href="#" className="stretched-link">
+                Continue reading
+              </a>
+            </div>
+          </div>
 
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a href="https://github.com/vercel/next.js/tree/master/examples" className="card">
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-          </a>
+          <nav className="blog-pagination">
+            <a className="btn btn-outline-primary" href="#">
+              Older
+            </a>
+            <a
+              className="btn btn-outline-secondary disabled"
+              href="#"
+              tabIndex={-1}
+              aria-disabled="true"
+            >
+              Newer
+            </a>
+          </nav>
         </div>
-      </main>
 
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by &nbsp;
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>
-        {`
-          .container {
-            min-height: 100vh;
-            padding: 0 0.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-          }
-
-          main {
-            padding: 5rem 0;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-          }
-
-          footer {
-            width: 100%;
-            height: 100px;
-            border-top: 1px solid #eaeaea;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-
-          footer img {
-            margin-left: 0.5rem;
-          }
-
-          footer a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-
-          a {
-            color: inherit;
-            text-decoration: none;
-          }
-
-          .title a {
-            color: #0070f3;
-            text-decoration: none;
-          }
-
-          .title a:hover,
-          .title a:focus,
-          .title a:active {
-            text-decoration: underline;
-          }
-
-          .title {
-            margin: 0;
-            line-height: 1.15;
-            font-size: 4rem;
-          }
-
-          .title,
-          .description {
-            text-align: center;
-          }
-
-          .description {
-            line-height: 1.5;
-            font-size: 1.5rem;
-          }
-
-          code {
-            background: #fafafa;
-            border-radius: 5px;
-            padding: 0.75rem;
-            font-size: 1.1rem;
-            font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-              Bitstream Vera Sans Mono, Courier New, monospace;
-          }
-
-          .grid {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-
-            max-width: 800px;
-            margin-top: 3rem;
-          }
-
-          .card {
-            margin: 1rem;
-            flex-basis: 45%;
-            padding: 1.5rem;
-            text-align: left;
-            color: inherit;
-            text-decoration: none;
-            border: 1px solid #eaeaea;
-            border-radius: 10px;
-            transition: color 0.15s ease, border-color 0.15s ease;
-          }
-
-          .card:hover,
-          .card:focus,
-          .card:active {
-            color: #0070f3;
-            border-color: #0070f3;
-          }
-
-          .card h3 {
-            margin: 0 0 1rem 0;
-            font-size: 1.5rem;
-          }
-
-          .card p {
-            margin: 0;
-            font-size: 1.25rem;
-            line-height: 1.5;
-          }
-
-          .logo {
-            height: 1em;
-          }
-
-          @media (max-width: 600px) {
-            .grid {
-              width: 100%;
-              flex-direction: column;
-            }
-          }
-        `}
-      </style>
-
-      <style jsx global>
-        {`
-          html,
-          body {
-            padding: 0;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-              Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-          }
-
-          * {
-            box-sizing: border-box;
-          }
-        `}
-      </style>
-    </div>
+        {/* /.blog-main */}
+        <aside className="col-md-4 blog-sidebar">
+          <div className="p-4">
+            <h4 className="font-italic">Archives</h4>
+            <ol className="list-unstyled mb-0">
+              <li>
+                <a href="#">March 2014</a>
+              </li>
+              <li>
+                <a href="#">February 2014</a>
+              </li>
+              <li>
+                <a href="#">January 2014</a>
+              </li>
+              <li>
+                <a href="#">December 2013</a>
+              </li>
+              <li>
+                <a href="#">November 2013</a>
+              </li>
+              <li>
+                <a href="#">October 2013</a>
+              </li>
+              <li>
+                <a href="#">September 2013</a>
+              </li>
+              <li>
+                <a href="#">August 2013</a>
+              </li>
+              <li>
+                <a href="#">July 2013</a>
+              </li>
+              <li>
+                <a href="#">June 2013</a>
+              </li>
+              <li>
+                <a href="#">May 2013</a>
+              </li>
+              <li>
+                <a href="#">April 2013</a>
+              </li>
+            </ol>
+          </div>
+          <div className="p-4">
+            <h4 className="font-italic">Elsewhere</h4>
+            <ol className="list-unstyled">
+              <li>
+                <a href="#">GitHub</a>
+              </li>
+              <li>
+                <a href="#">Twitter</a>
+              </li>
+              <li>
+                <a href="#">Facebook</a>
+              </li>
+            </ol>
+          </div>
+        </aside>
+        {/* /.blog-sidebar */}
+      </div>
+    </MainLayout>
   );
 };
 
