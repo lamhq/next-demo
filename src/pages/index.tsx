@@ -1,9 +1,16 @@
 import React from 'react';
 import Head from 'next/head';
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
 import MainLayout from '../components/layouts/Main';
+import { Post } from '../types/post';
+import { getAllPosts } from '../services/post';
 
-const Home: NextPage = () => {
+interface HomePageProps {
+  posts: Post[];
+}
+
+const HomePage: NextPage<HomePageProps> = ({ posts }) => {
   return (
     <MainLayout>
       <Head>
@@ -14,70 +21,29 @@ const Home: NextPage = () => {
       <div className="row">
         <div className="col-md-8 blog-main">
           <h3 className="pb-4 mb-4 font-italic border-bottom">Latest Posts</h3>
-
-          <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div className="col-auto d-none d-lg-block">
-              <svg
-                className="bd-placeholder-img"
-                width={200}
-                height={250}
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="xMidYMid slice"
-                focusable="false"
-                role="img"
-                aria-label="Placeholder: Thumbnail"
+          {posts.length === 0 && <p className="text-center">There&rsquo;re no posts to show.</p>}
+          {posts.map((post) => {
+            return (
+              <div
+                key={post.id}
+                className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
               >
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#55595c" />
-                <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-                  Thumbnail
-                </text>
-              </svg>
-            </div>
-            <div className="col p-4 d-flex flex-column position-static">
-              <h3 className="mb-0">Featured post</h3>
-              <div className="mb-1 text-muted">Nov 12</div>
-              <p className="card-text mb-auto">
-                This is a wider card with supporting text below as a natural lead-in to additional
-                content.
-              </p>
-              <a href="#" className="stretched-link">
-                Continue reading
-              </a>
-            </div>
-          </div>
-
-          <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div className="col-auto d-none d-lg-block">
-              <svg
-                className="bd-placeholder-img"
-                width={200}
-                height={250}
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="xMidYMid slice"
-                focusable="false"
-                role="img"
-                aria-label="Placeholder: Thumbnail"
-              >
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#55595c" />
-                <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-                  Thumbnail
-                </text>
-              </svg>
-            </div>
-            <div className="col p-4 d-flex flex-column position-static">
-              <h3 className="mb-0">Featured post</h3>
-              <div className="mb-1 text-muted">Nov 12</div>
-              <p className="card-text mb-auto">
-                This is a wider card with supporting text below as a natural lead-in to additional
-                content.
-              </p>
-              <a href="#" className="stretched-link">
-                Continue reading
-              </a>
-            </div>
-          </div>
+                <div className="col-auto d-none d-lg-block">
+                  <img src={post.image} alt={post.title} />
+                </div>
+                <div className="col p-4 d-flex flex-column position-static">
+                  <h3 className="mb-0">{post.title}</h3>
+                  <div className="mb-1 text-muted">Nov 12</div>
+                  <p className="card-text mb-auto">{post.desc}</p>
+                  <Link href="/posts/first-post">
+                    <button type="button" className="btn btn-link">
+                      Continue reading
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
 
           <nav className="blog-pagination">
             <a className="btn btn-outline-primary" href="#">
@@ -158,4 +124,20 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+HomePage.defaultProps = {
+  posts: [],
+};
+
+export default HomePage;
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const data = {
+    posts: await getAllPosts(),
+  };
+
+  // The value of the `props` key will be
+  //  passed to the `HomePage` component
+  return {
+    props: data,
+  };
+};
