@@ -8,12 +8,11 @@
     "start": "next start",
     "test": "jest --coverage --errorOnDeprecated",
     "test:watch": "jest --watch",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet",
-    "preversion": "git-branch-is -r \"^(feature|fix|hotfix)/AC-\\d+/[a-z\\-\\d\\.]+$\" && echo Preversion checks passed. Your branch name is correct format."
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn preversion && lint-staged",
+      "pre-commit": "lint-staged",
       "pre-push": "yarn test",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
@@ -25,10 +24,12 @@
   },
   "dependencies": {
     "bootstrap": "^4.5.3",
+    "clsx": "^1.1.1",
     "next": "10.0.1",
     "react": "17.0.1",
     "react-bootstrap": "^1.4.0",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "react-hook-form": "^6.11.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",
