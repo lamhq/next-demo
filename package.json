@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "test": "jest --coverage --errorOnDeprecated",
@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "clsx": "^1.1.1",
     "next": "10.0.1",

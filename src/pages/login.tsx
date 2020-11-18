@@ -1,13 +1,26 @@
 import React from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import clsx from 'clsx';
-import MainLayout from '../components/layouts/Main';
+import MainLayout from '../components/layouts/main';
 import { EMAIL_PATTERN } from '../constants/validation';
+import { useApi } from '../api';
+import { useIdentity } from '../common/identity';
+import { useNavigator } from '../common/hooks';
+
+type LoginFormData = {
+  email: string;
+  password: string;
+  remember: boolean;
+};
 
 const LoginPage: NextPage = () => {
-  const { register, handleSubmit, errors, formState } = useForm({
+  const { login } = useApi();
+  const [, setIdentity] = useIdentity();
+  const { goBack } = useNavigator();
+  // const { handleAsyncError } = useErrorHandler();
+  const { register, handleSubmit, errors, formState } = useForm<LoginFormData>({
     mode: 'onBlur',
     defaultValues: {
       remember: false,
@@ -15,7 +28,18 @@ const LoginPage: NextPage = () => {
       password: '',
     },
   });
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit: SubmitHandler<LoginFormData> = async (values) => {
+    try {
+      const { email, password } = values;
+      const token = await login(email, password);
+      setIdentity(token);
+      goBack();
+    } catch (error) {
+      console.log(error);
+      // handleAsyncError(error, { setInputErrors: setErrors });
+    }
+  };
 
   return (
     <MainLayout>
@@ -70,8 +94,12 @@ const LoginPage: NextPage = () => {
                 </label>
               </div>
 
-              <button type="submit" disabled={!formState.isValid} className="btn btn-primary">
-                Login
+              <button
+                type="submit"
+                disabled={!formState.isValid || formState.isSubmitting}
+                className="btn btn-primary"
+              >
+                {formState.isSubmitting ? 'Loging In...' : 'Login'}
               </button>
             </form>
           </div>

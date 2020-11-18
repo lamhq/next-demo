@@ -4,9 +4,17 @@ import React, { ReactElement } from 'react';
 import { AppProps } from 'next/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles.css';
+import { IdentityProvider } from '../common/identity';
+import { ApiProvider } from '../api';
 
 const App = ({ Component, pageProps }: AppProps): ReactElement<any, any> | null => {
-  return <Component {...pageProps} />;
+  return (
+    <IdentityProvider>
+      <ApiProvider>
+        <Component {...pageProps} />
+      </ApiProvider>
+    </IdentityProvider>
+  );
 };
 
 export default App;
