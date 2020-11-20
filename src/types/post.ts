@@ -1,3 +1,5 @@
+import { DatasetQuery } from './common';
+
 export enum PostStatus {
   Active = 'ACTIVE',
   InActive = 'IN_ACTIVE',
@@ -14,4 +16,8 @@ export interface Post {
   createdAt: string;
   author: string;
   authorId: string;
+}
+
+export interface PostQuery extends DatasetQuery {
+  keyword?: string;
 }

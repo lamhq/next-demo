@@ -3,9 +3,9 @@ import Head from 'next/head';
 import { NextPage } from 'next';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import clsx from 'clsx';
-import MainLayout from '../components/layouts/main';
+import MainLayout from '../components/layouts/maina';
 import { EMAIL_PATTERN } from '../constants/validation';
-import { useApi } from '../api';
+import { login } from '../services/auth';
 import { useIdentity } from '../common/identity';
 import { useNavigator } from '../common/hooks';
 
@@ -16,7 +16,6 @@ type LoginFormData = {
 };
 
 const LoginPage: NextPage = () => {
-  const { login } = useApi();
   const [, setIdentity] = useIdentity();
   const { goBack } = useNavigator();
   // const { handleAsyncError } = useErrorHandler();
@@ -32,8 +31,8 @@ const LoginPage: NextPage = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (values) => {
     try {
       const { email, password } = values;
-      const token = await login(email, password);
-      setIdentity(token);
+      const identity = await login(email, password);
+      setIdentity(identity);
       goBack();
     } catch (error) {
       console.log(error);

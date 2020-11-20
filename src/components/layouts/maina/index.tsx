@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert } from '../../../common/alert';
 import Header from './Header';
 
 const Layout: React.FC = ({ children }) => {
@@ -50,6 +51,7 @@ const Layout: React.FC = ({ children }) => {
       </div>
 
       <main role="main" className="container">
+        <Alert />
         {children}
       </main>
 

@@ -5,14 +5,14 @@ import { AppProps } from 'next/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles.css';
 import { IdentityProvider } from '../common/identity';
-import { ApiProvider } from '../api';
+import { AlertProvider } from '../common/alert';
 
 const App = ({ Component, pageProps }: AppProps): ReactElement<any, any> | null => {
   return (
     <IdentityProvider>
-      <ApiProvider>
+      <AlertProvider>
         <Component {...pageProps} />
-      </ApiProvider>
+      </AlertProvider>
     </IdentityProvider>
   );
 };
