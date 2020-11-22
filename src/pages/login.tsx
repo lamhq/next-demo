@@ -3,11 +3,11 @@ import Head from 'next/head';
 import { NextPage } from 'next';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import clsx from 'clsx';
-import MainLayout from '../components/layouts/maina';
 import { EMAIL_PATTERN } from '../constants/validation';
 import { login } from '../services/auth';
 import { useIdentity } from '../common/identity';
-import { useNavigator } from '../common/hooks';
+import { useAxiosErrorHandler, useNavigator } from '../common/hooks';
+import { MainLayout } from '../components/layouts';
 
 type LoginFormData = {
   email: string;
@@ -18,7 +18,7 @@ type LoginFormData = {
 const LoginPage: NextPage = () => {
   const [, setIdentity] = useIdentity();
   const { goBack } = useNavigator();
-  // const { handleAsyncError } = useErrorHandler();
+  const handleAxiosError = useAxiosErrorHandler();
   const { register, handleSubmit, errors, formState } = useForm<LoginFormData>({
     mode: 'onBlur',
     defaultValues: {
@@ -29,15 +29,18 @@ const LoginPage: NextPage = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFormData> = async (values) => {
+    const { email, password } = values;
+    let identity;
     try {
-      const { email, password } = values;
-      const identity = await login(email, password);
-      setIdentity(identity);
-      goBack();
+      identity = await login(email, password);
     } catch (error) {
-      console.log(error);
-      // handleAsyncError(error, { setInputErrors: setErrors });
+      handleAxiosError(error);
+      return;
     }
+
+    // login success
+    setIdentity(identity);
+    goBack();
   };
 
   return (

@@ -244,6 +244,9 @@ module.exports = {
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-filename-extension.md
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
 
-    'jsx-a11y/label-has-associated-control': 'off'
+    // These rules are really annoying
+    'jsx-a11y/label-has-associated-control': 'off',
+    'jsx-a11y/anchor-is-valid': 'off',
+    'react-hooks/exhaustive-deps': 'off'
   },
 };

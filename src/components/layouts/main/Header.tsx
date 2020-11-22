@@ -1,6 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import User from './UserView';
+import dynamic from 'next/dynamic';
+
+// https://stackoverflow.com/questions/62243026/expected-server-html-to-contain-a-matching-tag-in-tag
+const User = dynamic(() => import('./UserView'), { ssr: false });
 
 const Header: React.FC = () => {
   return (
@@ -8,9 +11,7 @@ const Header: React.FC = () => {
       <div className="row flex-nowrap justify-content-between align-items-center">
         <div className="col-4">
           <Link href="/">
-            <button type="button" className="blog-header-logo text-dark btn btn-link">
-              Logo
-            </button>
+            <a className="blog-header-logo text-dark btn btn-link">Logo</a>
           </Link>
         </div>
         <div className="col-4 d-flex justify-content-end align-items-center">
@@ -20,4 +21,5 @@ const Header: React.FC = () => {
     </header>
   );
 };
+
 export default Header;

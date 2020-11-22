@@ -1,22 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
 import { useIdentity } from '../../../common/identity';
-import { logout } from '../../../services/auth';
 
 const UserPanel: React.FC = () => {
-  const [identity, setIdentity] = useIdentity();
-  const handleLogout = () => {
-    setIdentity(undefined);
-    logout();
-  };
+  const [identity] = useIdentity();
 
   return identity ? (
     <>
       Welcome,&nbsp;
-      <strong>{identity.displayName}</strong>
-      <button type="button" className="btn btn-sm btn-link" onClick={handleLogout}>
-        <em>(Sign out)</em>
-      </button>
+      <Link href="/user/profile">
+        <a>
+          <strong>{identity.displayName}</strong>
+        </a>
+      </Link>
     </>
   ) : (
     <Link href="/login">
