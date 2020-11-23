@@ -1,28 +1,35 @@
 import React from 'react';
 import Head from 'next/head';
-import { GetStaticProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { MainLayout } from '../../components/layouts';
 import { withAuth } from '../../common/hocs';
-import { logout } from '../../services/auth';
 import { useIdentity } from '../../common/identity';
+import ProfileService from '../../services/profile';
+import { User } from '../../types/user';
+import AuthService from '../../services/auth';
+import { getDIContainer } from '../../common/utils';
+
+const authService = getDIContainer().get(AuthService);
 
 interface ProfilePageProps {
-  content: string;
+  user: User;
 }
 
-const ProfilePage: NextPage<ProfilePageProps> = ({ content }) => {
+const ProfilePage: NextPage<ProfilePageProps> = ({ user }) => {
   const [, setIdentity] = useIdentity();
   const handleLogout = () => {
     setIdentity(undefined);
-    logout();
+    authService.logout();
   };
+
   return (
     <MainLayout>
       <Head>
         <title>NextDemo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <p>{content}</p>
+      <p>{user.name}</p>
+      <p>{user.email}</p>
       <button type="button" className="btn btn-sm btn-outline-secondary" onClick={handleLogout}>
         Sign out
       </button>
@@ -32,10 +39,12 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ content }) => {
 
 export default withAuth(ProfilePage);
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (context) => {
+  const profileService = getDIContainer(context).get(ProfileService);
+  const user = await profileService.getProfile();
   return {
     props: {
-      content: 'profile data',
+      user,
     },
   };
 };

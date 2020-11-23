@@ -3,11 +3,14 @@ import Head from 'next/head';
 import { NextPage } from 'next';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import clsx from 'clsx';
+import { Container } from 'typedi';
 import { EMAIL_PATTERN } from '../constants/validation';
-import { login } from '../services/auth';
+import AuthService from '../services/auth';
 import { useIdentity } from '../common/identity';
 import { useAxiosErrorHandler, useNavigator } from '../common/hooks';
 import { MainLayout } from '../components/layouts';
+
+const authService = Container.get(AuthService);
 
 type LoginFormData = {
   email: string;
@@ -32,7 +35,7 @@ const LoginPage: NextPage = () => {
     const { email, password } = values;
     let identity;
     try {
-      identity = await login(email, password);
+      identity = await authService.login(email, password);
     } catch (error) {
       handleAxiosError(error);
       return;

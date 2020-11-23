@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import 'reflect-metadata';
 import React, { ReactElement } from 'react';
 import { AppProps } from 'next/app';
 import 'bootstrap/dist/css/bootstrap.min.css';

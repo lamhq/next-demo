@@ -2,8 +2,9 @@ import React from 'react';
 import Head from 'next/head';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
+import { Container } from 'typedi';
 import { Post } from '../types/post';
-import { findAllAndCount } from '../services/post';
+import PostService from '../services/post';
 import { MainLayout } from '../components/layouts';
 
 interface HomePageProps {
@@ -71,7 +72,8 @@ HomePage.defaultProps = {
 export default HomePage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const [total, posts] = await findAllAndCount();
+  const postService = Container.get(PostService);
+  const [total, posts] = await postService.findAllAndCount();
   const data = {
     posts,
   };

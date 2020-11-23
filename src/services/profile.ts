@@ -1,11 +1,17 @@
+import { Service } from 'typedi';
 import { User } from '../types/user';
-import httpService from './http';
+import HttpService from './http';
 
-export async function getProfile(): Promise<User> {
-  const resp = await httpService.get<User>('/user/accounts/mine');
-  return resp.data;
-}
+@Service()
+export default class ProfileService {
+  constructor(private readonly httpService: HttpService) {}
 
-export async function updateProfile(): Promise<void> {
-  return httpService.patch('/user/accounts/mine');
+  async getProfile(): Promise<User> {
+    const resp = await this.httpService.get<User>('/user/accounts/mine');
+    return resp.data;
+  }
+
+  async updateProfile(): Promise<void> {
+    return this.httpService.patch('/user/accounts/mine');
+  }
 }

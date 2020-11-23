@@ -1,10 +1,17 @@
+import { Service } from 'typedi';
 import { Post } from '../types/post';
+import HttpService from './http';
 
-export async function findAllAndCount(): Promise<[number, Post[]]> {
-  return [0, []];
-}
+@Service()
+export default class PostService {
+  constructor(private readonly httpService: HttpService) {}
 
-export async function findOne(slug: string): Promise<Post> {
-  console.log(slug);
-  return null;
+  async findAllAndCount(): Promise<[number, Post[]]> {
+    return [0, []];
+  }
+
+  async findOne(slug: string): Promise<Post> {
+    console.log(slug);
+    return {} as Post;
+  }
 }
