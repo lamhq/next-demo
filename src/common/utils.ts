@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
-import { Container, ContainerInstance, Token } from 'typedi';
-import cookies from 'next-cookies';
-import { GetServerSidePropsContext } from 'next';
-import { AUTH_TOKEN } from '../constants/auth';
+import { Container, ObjectType, Token } from 'typedi';
 
+/**
+ * Injects a service into a class property or constructor parameter.
+ * No exception thrown when service was not registered
+ */
 export function OptionalInject(
   typeOrName?: ((type?: any) => Function) | string | Token<any>,
 ): Function {
@@ -34,14 +35,9 @@ export function OptionalInject(
   };
 }
 
-export function getDIContainer(nextContext?: GetServerSidePropsContext): ContainerInstance {
-  if (nextContext) {
-    const { token } = cookies(nextContext);
-    if (token) {
-      const container = Container.of(token);
-      container.set(AUTH_TOKEN, token);
-      return container;
-    }
-  }
-  return Container.of('global');
+/**
+ * Retrieves the service with given type from the service container.
+ */
+export function getService<T>(type: ObjectType<T>, containerId?: string): T {
+  return containerId ? Container.of(containerId).get(type) : Container.get(type);
 }

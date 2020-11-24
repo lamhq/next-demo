@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Reducer } from 'react';
 
 interface LoadingState<T> {
@@ -7,12 +6,15 @@ interface LoadingState<T> {
   data?: T;
 }
 
+/**
+ * Available options to customize hook's behavior
+ */
 interface LoadOptions {
-  // if set to true, fetcher function won't be called automatically
-  delay: boolean;
-
-  // whether to throw exception when async function is rejected
-  // exception: false;
+  /**
+   * whether async function will be called automatically
+   * usecase: fetching data on page load
+   */
+  autoFetch: boolean;
 }
 
 interface Action<T> {
@@ -21,13 +23,17 @@ interface Action<T> {
   error?: Error;
 }
 
-type Fetcher<T> = (...arg: any[]) => Promise<T>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AsyncFn<T> = (...arg: any[]) => Promise<T | undefined>;
 
-function init<T>(options: LoadOptions): LoadingState<T> {
+/**
+ * Return initial state base on configuration
+ */
+function init<T>(config: LoadOptions): LoadingState<T> {
   const initialState = {
     data: undefined,
     error: undefined,
-    loading: !options.delay,
+    loading: config.autoFetch,
   };
   return initialState;
 }
@@ -50,39 +56,40 @@ function reducer<T>(state: LoadingState<T>, action: Action<T>): LoadingState<T> 
 
 /**
  * React hook that manage loading state for async function
- *
- * @param {Function} fn
  */
 export default function useLoadingState<T>(
-  fn: Fetcher<T>,
-  options: Partial<LoadOptions> = {},
-): { load: Fetcher<T> } & LoadingState<T> {
-  const opt: LoadOptions = {
-    delay: false,
-    ...options,
-  };
+  fn: AsyncFn<T>,
+  config: Partial<LoadOptions> = {},
+): { load: AsyncFn<T> } & LoadingState<T> {
+  const options: LoadOptions = { autoFetch: true, ...config };
+
   const [state, dispatch] = React.useReducer<Reducer<LoadingState<T>, Action<T>>, LoadOptions>(
     reducer,
-    opt,
+    options,
     init,
   );
 
-  const load: Fetcher<T> = async (...params) => {
+  const load: AsyncFn<T> = async (...params) => {
     try {
-      // dispatch start loading event if function was
-      // not called automatically or it's not the first run
-      if (opt.delay || state.data !== null) {
-        dispatch({ type: 'start' });
-      }
-
+      dispatch({ type: 'start' });
       const res = await fn(...params);
       dispatch({ type: 'load-finish', data: res });
       return res;
     } catch (err) {
       dispatch({ type: 'load-error', error: err });
+      // don't throw exception in fetching data mode
+      if (options.autoFetch) {
+        return undefined;
+      }
       throw err;
     }
   };
+
+  React.useEffect(() => {
+    if (options.autoFetch) {
+      load();
+    }
+  }, []);
 
   return {
     ...state,

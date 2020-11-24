@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert } from '../../../common/alert';
 import Header from './Header';
 
-const Layout: React.FC = ({ children }) => {
+const MainLayout: React.FC = ({ children }) => {
   return (
     <>
       <div className="container">
@@ -70,4 +70,4 @@ const Layout: React.FC = ({ children }) => {
   );
 };
 
-export default Layout;
+export default MainLayout;

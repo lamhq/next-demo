@@ -5,7 +5,7 @@ import { useIdentity } from '../identity';
 
 export type HandleAxiosError = (error: AxiosError<ErrorResponse>) => void;
 
-export default function useAxiosErrorHandler(): HandleAxiosError {
+export default function useHttpErrorHandler(): HandleAxiosError {
   const { alertError } = useAlert();
   const [, setIdentity] = useIdentity();
 

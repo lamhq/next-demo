@@ -2,8 +2,8 @@ import React, { Dispatch, SetStateAction } from 'react';
 
 export default function usePermanentState<T>(name: string): [T, Dispatch<SetStateAction<T>>] {
   const [value, setValue] = React.useState<T>(() => {
-    // for next.js server rendering
-    if (!process.browser) {
+    // for server side rendering
+    if (typeof window === 'undefined') {
       return undefined;
     }
     const str = window.localStorage.getItem(name);

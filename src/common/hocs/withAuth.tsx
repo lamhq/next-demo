@@ -1,10 +1,9 @@
 import React from 'react';
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useIdentity } from '../identity';
 
-export default function withAuth<T>(PageComponent: NextPage<T>): NextPage<T> {
-  const WithAuth: NextPage<T> = (props) => {
+export default function withAuth<T>(Component: React.FC<T>): React.FC<T> {
+  const WithAuth: React.FC<T> = (props) => {
     const [identity] = useIdentity();
     const router = useRouter();
 
@@ -15,7 +14,7 @@ export default function withAuth<T>(PageComponent: NextPage<T>): NextPage<T> {
     }, [identity]);
 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    return identity ? <PageComponent {...props} /> : <p>Redirecting...</p>;
+    return identity ? <Component {...props} /> : <p>Redirecting...</p>;
   };
 
   WithAuth.displayName = 'WithAuth';
