@@ -71,7 +71,11 @@ export default function useLoadingState<T>(
 
   const load: AsyncFn<T> = async (...params) => {
     try {
-      dispatch({ type: 'start' });
+      // only dispatch start loading event if async function
+      // not called automatically on startup or it's not the first run
+      if (!options.autoFetch || state.data !== undefined) {
+        dispatch({ type: 'start' });
+      }
       const res = await fn(...params);
       dispatch({ type: 'load-finish', data: res });
       return res;
@@ -91,6 +95,7 @@ export default function useLoadingState<T>(
     }
   }, []);
 
+  console.log(state);
   return {
     ...state,
     load,

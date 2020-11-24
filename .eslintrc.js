@@ -245,7 +245,6 @@ module.exports = {
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
 
     // These rules are really annoying
-    'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'react-hooks/exhaustive-deps': 'off',
     'import/prefer-default-export': 'off'

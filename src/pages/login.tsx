@@ -1,16 +1,14 @@
 import React from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import clsx from 'clsx';
-import { Container } from 'typedi';
+import { SubmitHandler, useForm, Controller } from 'react-hook-form';
+import { Button, Form, FormGroup, Label, Input, FormText, FormFeedback } from 'reactstrap';
 import { EMAIL_PATTERN } from '../constants/validation';
-import AuthService from '../services/auth';
 import { useIdentity } from '../common/identity';
-import { useAxiosErrorHandler, useNavigator } from '../common/hooks';
+import { useHttpErrorHandler, useNavigator } from '../common/hooks';
 import { MainLayout } from '../components/layouts';
-
-const authService = Container.get(AuthService);
+import { AuthService } from '../services';
+import { getService } from '../common/utils';
 
 type LoginFormData = {
   email: string;
@@ -21,9 +19,10 @@ type LoginFormData = {
 const LoginPage: NextPage = () => {
   const [, setIdentity] = useIdentity();
   const { goBack } = useNavigator();
-  const handleAxiosError = useAxiosErrorHandler();
-  const { register, handleSubmit, errors, formState } = useForm<LoginFormData>({
+  const handleHttpError = useHttpErrorHandler();
+  const { handleSubmit, errors, formState, control } = useForm<LoginFormData>({
     mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
       remember: false,
       email: '',
@@ -35,9 +34,9 @@ const LoginPage: NextPage = () => {
     const { email, password } = values;
     let identity;
     try {
-      identity = await authService.login(email, password);
+      identity = await getService(AuthService).login(email, password);
     } catch (error) {
-      handleAxiosError(error);
+      handleHttpError(error);
       return;
     }
 
@@ -57,56 +56,58 @@ const LoginPage: NextPage = () => {
         <h3 className="pb-4 mb-4 font-italic border-bottom">Login</h3>
         <div className="row">
           <div className="col-md-8">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-group">
-                <label htmlFor="exampleInputEmail1">Email</label>
-                <input
-                  id="exampleInputEmail1"
-                  type="email"
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <FormGroup>
+                <Label for="email">Email</Label>
+                <Controller
                   name="email"
-                  ref={register({ required: true, maxLength: 20, pattern: EMAIL_PATTERN })}
-                  className={clsx('form-control', { 'is-invalid': errors.email })}
+                  id="email"
+                  type="email"
+                  invalid={!!errors.email}
+                  as={Input}
+                  control={control}
+                  rules={{ required: true, maxLength: 20, pattern: EMAIL_PATTERN }}
                 />
-                {errors.email && (
-                  <div className="invalid-feedback">Please provide a valid email.</div>
-                )}
-              </div>
+                <FormFeedback>Please provide a valid email.</FormFeedback>
+              </FormGroup>
 
-              <div className="form-group">
-                <label htmlFor="exampleInputPassword1">Password</label>
-                <input
-                  type="password"
+              <FormGroup>
+                <Label for="password">Password</Label>
+                <Controller
                   name="password"
-                  ref={register({ required: true, minLength: 6 })}
-                  className={clsx('form-control', { 'is-invalid': errors.password })}
-                  id="exampleInputPassword1"
+                  id="password"
+                  type="password"
+                  invalid={!!errors.password}
+                  as={Input}
+                  control={control}
+                  rules={{ required: true, minLength: 6 }}
                 />
-                {errors.password && (
-                  <div className="invalid-feedback">Please provide a valid password.</div>
-                )}
-              </div>
+                <FormFeedback>Please provide a valid password.</FormFeedback>
+                <FormText>Password is requred and minimum length is 6 characters.</FormText>
+              </FormGroup>
 
-              <div className="form-group form-check">
-                <input
-                  type="checkbox"
+              <FormGroup className="form-group" check>
+                <Controller
                   name="remember"
-                  className="form-check-input"
-                  id="exampleCheck1"
-                  ref={register}
+                  id="remember"
+                  type="checkbox"
+                  invalid={!!errors.remember}
+                  as={Input}
+                  control={control}
                 />
-                <label className="form-check-label" htmlFor="exampleCheck1">
+                <Label for="remember" check>
                   Remember me
-                </label>
-              </div>
+                </Label>
+              </FormGroup>
 
-              <button
+              <Button
                 type="submit"
+                color="primary"
                 disabled={!formState.isValid || formState.isSubmitting}
-                className="btn btn-primary"
               >
                 {formState.isSubmitting ? 'Loging In...' : 'Login'}
-              </button>
-            </form>
+              </Button>
+            </Form>
           </div>
         </div>
       </div>

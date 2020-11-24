@@ -1,5 +1,5 @@
 import React from 'react';
-import BsAlert from 'react-bootstrap/Alert';
+import { Alert as BsAlert } from 'reactstrap';
 import useAlert from '../hooks/useAlert';
 
 const Alert: React.FC = () => {
@@ -8,7 +8,7 @@ const Alert: React.FC = () => {
   if (!alert) return null;
   const { variant, message } = alert;
   return (
-    <BsAlert variant={variant} dismissible onClose={closeAlert}>
+    <BsAlert color={variant} isOpen={!!alert} toggle={closeAlert}>
       {message}
     </BsAlert>
   );

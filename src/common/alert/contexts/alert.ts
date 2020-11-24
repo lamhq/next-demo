@@ -1,10 +1,9 @@
 import React from 'react';
-import { Variant } from 'react-bootstrap/esm/types';
 
 export interface AlertContext {
   alert?: {
     message: string;
-    variant: Variant;
+    variant: 'success' | 'danger' | 'warning';
   };
   alertSuccess: (message: string) => void;
   alertError: (message: string) => void;

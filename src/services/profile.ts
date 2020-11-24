@@ -2,6 +2,14 @@ import { Service } from 'typedi';
 import { User } from '../types/user';
 import HttpService from './http';
 
+export interface UpdateProfileData {
+  name: string;
+  phone: string;
+  // avarta: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
 @Service()
 export default class ProfileService {
   constructor(private readonly httpService: HttpService) {}
@@ -11,7 +19,7 @@ export default class ProfileService {
     return resp.data;
   }
 
-  async updateProfile(): Promise<void> {
-    return this.httpService.patch('/user/accounts/mine');
+  async updateProfile(data: UpdateProfileData): Promise<void> {
+    return this.httpService.patch('/user/accounts/mine', data);
   }
 }

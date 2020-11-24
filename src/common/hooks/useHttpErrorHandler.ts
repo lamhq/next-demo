@@ -9,7 +9,7 @@ export default function useHttpErrorHandler(): HandleAxiosError {
   const { alertError } = useAlert();
   const [, setIdentity] = useIdentity();
 
-  return (error: AxiosError<ErrorResponse>) => {
+  return function handleHttpError(error: AxiosError<ErrorResponse>) {
     if (!error.isAxiosError) return;
 
     let { message } = error;

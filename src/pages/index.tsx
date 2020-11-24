@@ -4,7 +4,7 @@ import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import { Container } from 'typedi';
 import { Post } from '../types/post';
-import PostService from '../services/post';
+import { PostService } from '../services';
 import { MainLayout } from '../components/layouts';
 
 interface HomePageProps {

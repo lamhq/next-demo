@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { NextPage } from 'next';
 import { MainLayout } from '../../components/layouts';
 
-const ProfilePageContent = dynamic(() => import('../../components/ProfilePageContent'), {
+const ProfileContent = dynamic(() => import('../../components/ProfileContent'), {
   ssr: false,
 });
 
@@ -14,7 +14,7 @@ const ProfilePage: NextPage = () => {
       <Head>
         <title>NextDemo - Profile</title>
       </Head>
-      <ProfilePageContent />
+      <ProfileContent />
     </MainLayout>
   );
 };
