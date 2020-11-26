@@ -48,7 +48,7 @@ const LoginPage: NextPage = () => {
   return (
     <MainLayout>
       <Head>
-        <title>NextDemo</title>
+        <title>Login - NextDemo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

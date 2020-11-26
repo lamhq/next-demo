@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
+import { GetServerSidePropsContext } from 'next';
 import { Container, ObjectType, Token } from 'typedi';
 
 /**
@@ -40,4 +41,18 @@ export function OptionalInject(
  */
 export function getService<T>(type: ObjectType<T>, containerId?: string): T {
   return containerId ? Container.of(containerId).get(type) : Container.get(type);
+}
+
+/**
+ * Get query string value from next context
+ */
+export function getQueryValueFromContext(
+  context: GetServerSidePropsContext,
+  key: string,
+  defaultValue = '',
+): string {
+  if (context.query[key]) {
+    return context.query[key] as string;
+  }
+  return defaultValue;
 }

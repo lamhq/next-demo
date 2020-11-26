@@ -1,24 +1,14 @@
 import React from 'react';
 import Head from 'next/head';
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import qs from 'qs';
 
 import { Post } from '../types/post';
 import { PostService } from '../services';
 import { MainLayout } from '../components/layouts';
-import { getService } from '../common/utils';
-
-function getQueryValueFromContext(
-  context: GetServerSidePropsContext,
-  key: string,
-  defaultValue = '',
-): string {
-  if (context.query[key]) {
-    return context.query[key] as string;
-  }
-  return defaultValue;
-}
+import { getQueryValueFromContext, getService } from '../common/utils';
+import { APP_NAME } from '../config';
 
 interface HomePageProps {
   query: {
@@ -51,7 +41,7 @@ const HomePage: NextPage<HomePageProps> = ({ query, posts, pageCount }) => {
   return (
     <MainLayout>
       <Head>
-        <title>NextDemo</title>
+        <title>{APP_NAME}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -72,10 +62,8 @@ const HomePage: NextPage<HomePageProps> = ({ query, posts, pageCount }) => {
                   <h3 className="mb-0">{post.title}</h3>
                   <div className="mb-1 text-muted">Nov 12</div>
                   <p className="card-text mb-auto">{post.desc}</p>
-                  <Link href="/posts/first-post">
-                    <button type="button" className="btn btn-link">
-                      Continue reading
-                    </button>
+                  <Link href="/posts/[slug]" as={`/posts/${post.slug}`}>
+                    <a>Continue reading</a>
                   </Link>
                 </div>
               </div>

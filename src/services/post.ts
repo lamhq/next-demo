@@ -16,7 +16,6 @@ export default class PostService {
   async findAllAndCount(query?: PostQuery): Promise<[number, Post[]]> {
     const q: PostQuery = {
       offset: 0,
-      limit: 10,
       ...query,
     };
     const resp = await this.httpService.get<Post[]>('/cms/posts', {
@@ -27,7 +26,7 @@ export default class PostService {
   }
 
   async findOne(slug: string): Promise<Post> {
-    console.log(slug);
-    return {} as Post;
+    const resp = await this.httpService.get<Post>(`/cms/posts/${slug}`);
+    return resp.data;
   }
 }

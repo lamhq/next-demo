@@ -247,6 +247,7 @@ module.exports = {
     // These rules are really annoying
     'jsx-a11y/anchor-is-valid': 'off',
     'react-hooks/exhaustive-deps': 'off',
-    'import/prefer-default-export': 'off'
+    'import/prefer-default-export': 'off',
+    'react/jsx-one-expression-per-line': 'off',
   },
 };
