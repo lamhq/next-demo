@@ -1,17 +1,53 @@
 import React from 'react';
 import Head from 'next/head';
-import { GetStaticProps, NextPage } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Link from 'next/link';
-import { Container } from 'typedi';
+import qs from 'qs';
+
 import { Post } from '../types/post';
 import { PostService } from '../services';
 import { MainLayout } from '../components/layouts';
+import { getService } from '../common/utils';
+
+function getQueryValueFromContext(
+  context: GetServerSidePropsContext,
+  key: string,
+  defaultValue = '',
+): string {
+  if (context.query[key]) {
+    return context.query[key] as string;
+  }
+  return defaultValue;
+}
 
 interface HomePageProps {
+  query: {
+    s: string;
+    page: number;
+  };
+  pageCount: number;
   posts: Post[];
 }
 
-const HomePage: NextPage<HomePageProps> = ({ posts }) => {
+const HomePage: NextPage<HomePageProps> = ({ query, posts, pageCount }) => {
+  const { page } = query;
+
+  function buildRoute(p = 1, text = ''): string {
+    const queryObj: Partial<HomePageProps['query']> = { ...query, page: p, s: text };
+    if (queryObj.page === 1) {
+      delete queryObj.page;
+    }
+    if (queryObj.s === '') {
+      delete queryObj.s;
+    }
+    const q = qs.stringify(queryObj);
+    let route = '/';
+    if (q) {
+      route += `?${q}`;
+    }
+    return route;
+  }
+
   return (
     <MainLayout>
       <Head>
@@ -47,17 +83,16 @@ const HomePage: NextPage<HomePageProps> = ({ posts }) => {
           })}
 
           <nav className="blog-pagination">
-            <a className="btn btn-outline-primary" href="#">
-              Older
-            </a>
-            <a
-              className="btn btn-outline-secondary disabled"
-              href="#"
-              tabIndex={-1}
-              aria-disabled="true"
-            >
-              Newer
-            </a>
+            {page > 1 && (
+              <Link href={buildRoute(page - 1)}>
+                <a className="btn btn-outline-primary">Newer</a>
+              </Link>
+            )}
+            {pageCount > page && (
+              <Link href={buildRoute(page + 1)}>
+                <a className="btn btn-outline-secondary">Older</a>
+              </Link>
+            )}
           </nav>
         </div>
       </div>
@@ -71,15 +106,24 @@ HomePage.defaultProps = {
 
 export default HomePage;
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const postService = Container.get(PostService);
-  const [total, posts] = await postService.findAllAndCount();
+export const getServerSideProps: GetServerSideProps<HomePageProps> = async (context) => {
+  const page = parseInt(getQueryValueFromContext(context, 'page', '1'), 10);
+  const text = getQueryValueFromContext(context, 's');
+  const limit = 2;
+  const [total, posts] = await getService(PostService).findAllAndCount({
+    text,
+    limit,
+    offset: (page - 1) * limit,
+  });
   const data = {
+    query: {
+      s: text,
+      page,
+    },
+    pageCount: Math.ceil(total / limit),
     posts,
   };
 
-  // The value of the `props` key will be
-  //  passed to the `HomePage` component
   return {
     props: data,
   };

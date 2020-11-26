@@ -86,10 +86,6 @@ const ProfileContent: React.FC = () => {
     }
   }, [error]);
 
-  if (error) {
-    return <p>Error occured while loading data.</p>;
-  }
-
   const formData: UpdateProfileData = {
     currentPassword: '',
     newPassword: '',

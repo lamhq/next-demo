@@ -19,5 +19,5 @@ export interface Post {
 }
 
 export interface PostQuery extends DatasetQuery {
-  keyword?: string;
+  text?: string;
 }
