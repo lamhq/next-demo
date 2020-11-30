@@ -3,9 +3,9 @@ import { ErrorResponse } from '../../types/common';
 import { useAlert } from '../alert';
 import { useIdentity } from '../identity';
 
-export type HandleAxiosError = (error: AxiosError<ErrorResponse>) => void;
+export type HandleHttpError = (error: AxiosError<ErrorResponse>) => void;
 
-export default function useHttpErrorHandler(): HandleAxiosError {
+export default function useHttpErrorHandler(): HandleHttpError {
   const { alertError } = useAlert();
   const [, setIdentity] = useIdentity();
 
